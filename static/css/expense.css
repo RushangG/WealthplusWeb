@@ -1,0 +1,75 @@
+/* CSS for left-side navigation */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #343a40;
+    padding-top: 50px; /* Adjusted for fixed header */
+    color: #fff;
+}
+.sidebar a {
+    padding: 10px;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+}
+.sidebar a:hover {
+    background-color: #495057;
+}
+
+/* CSS for header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #212832;
+    padding: 0.5px 15px;
+    color: #fff;
+    z-index: 1000;
+}
+
+
+
+
+/* CSS for footer */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #212832;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+/* CSS for main content */
+.main-content {
+    margin-left: 250px;
+    padding-top: 70px; /* Adjusted for fixed header */
+}
+
+/* CSS for modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+}
+
+/* CSS for modal content */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+

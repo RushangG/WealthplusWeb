@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <header>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+        <div><h1>WealthPlus</h1></div>
+        <div>
+            <h1>Welcome, {{ user.username }}</h1>
+        </div>
+    </header>
+
+{% if user.is_authenticated %}
+    <!-- Content for authenticated users goes here -->
+   <body>
+    <div class="sidebar">
+        <a href="#">Dashboard</a>
+        <a href="{% url 'home' %}" class="active">Home</a> 
+        <a href="{% url 'income' %}" class="active">Income</a> 
+        <a href="{% url 'expense' %}" class="active">Expense</a>
+        <a href="{% url 'report' %}" class="active">Reports</a>
+        <a href="{% url "logout" %}">logout</a>
+
+    </div>
+    <header style="display: flex;flex-direction: row;justify-content: space-around;">
+
+        <div><h1>WealthPlus </h1></div>
+        <div><h1> Welcome, {{ user.username }} </h1></div>
+
+       
+    </header>
+    <div class="main-content">
+        <h1>Welcome to WealthPlus, {{ user.username }}!</h1>
+        <p>Hey {{ user.username }}, welcome back to WealthPlus! Get ready to take control of your finances like never before.</p>
+        <h2>Why WealthPlus?</h2>
+        <ul>
+            <li><strong>Easy Income Tracking:</strong> Add income from different sources with ease.</li>
+            <li><strong>Confident Expense Management:</strong> Understand your spending habits to take control of your finances.</li>
+            <li><strong>Smart Report:</strong> Gain valuable insights into your financial health and make informed decisions for your future.</li>
+        </ul>
+        <h2>Start Exploring!</h2>
+        <p>Explore the features of WealthPlus and see how you can make the most out of your financial journey.</p>
+        <h2>Let's Get Started!</h2>
+        <p>Start by checking out your dashboard or navigating to the income and expense sections to manage your finances effectively.</p>
+        <blockquote>"Empower yourself financially with WealthPlus."</blockquote>
+    </div>
+    
+    
+    <br>
+    <footer>
+        <p>&copy; 2024 WealthPlus. All rights reserved.</p>
+    </footer>
+</body>
+{% else %}
+    <!-- Message prompting the user to sign up -->
+    {% url 'login' as login_url %}
+    <script>
+        window.location.href = "{{ login_url }}";
+    </script>
+{% endif %}
+
+
+
+
+</html>

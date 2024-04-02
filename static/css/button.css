@@ -1,0 +1,33 @@
+  button {
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        /* Style for edit button */
+        button.edit {
+            background-color: rgb(87, 87, 232); /* Green */
+            color: white;
+            margin-right: 8px;
+        }
+        button.addincome {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            margin-right: 8px;
+        }
+        button.addexpense {
+            background-color: orange; /* Green */
+            color: white;
+            margin-right: 8px;
+        }
+        /* Style for delete button */
+        button.delete {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+        button.delete a {
+            text-decoration: none; /* Remove underline */
+            color: inherit; /* Inherit color from the button */
+        }

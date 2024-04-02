@@ -1,0 +1,161 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head style="display: flex;flex-direction: row;justify-content: space-around;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthPlus - Income</title>
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
+
+</head>
+{% if user.is_authenticated %}
+<body>
+    <div class="sidebar">
+        <a href="#">Dashboard</a>
+        <a href="{% url 'home' %}" class="active">Home</a>
+        <a href="{% url 'income' %}" class="active">Income</a> 
+        <a href="{% url 'expense' %}" class="active">Expense</a>
+        <a href="{% url 'report' %}" class="active">Reports</a>
+        <a href="{% url "logout" %}">logout</a>
+        
+    </div>
+    <header style="display: flex;flex-direction: row;justify-content: space-around;">
+        <div><h1>WealthPlus </h1></div>
+        <div><h1> Welcome, {{ user.username }} </h1></div>
+    </header>
+
+ 
+   
+   
+ 
+    <div class="main-content">
+        <!-- Main Content -->
+        <h2>Income Source Details</h2>
+        <div class="filter-form-container" style="display: inline-block; float: right;">
+            <button id="filter-btn">Filter</button>
+            <div id="filter-popup" class="filter-popup">
+                <form method="get" action="{% url 'filter_report' %}">
+                    <label for="start-date">Start Date:</label>
+                    <input value="{{start_date}}" type="date" id="start-date" name="start_date">
+                    <label for="end-date">End Date:</label>
+                    <input value="{{end_date}}" type="date" id="end-date" name="end_date">
+                    <button type="submit">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+
+        {% if incomes %}
+            <table border="1" cellpadding="10" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for income in incomes %}
+                        <tr>
+                            <td>{{ income.source }}</td>
+                            <td>{{ income.amount }}</td>
+                            <td>{{ income.date }}</td>
+                            <td>{{ income.category }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No incomes available.</p>
+        {% endif %}
+    
+    
+    
+        <!-- Main Content -->
+        <h2>Expense Details</h2>
+        {% if expenses %}
+            <table border="1" cellpadding="10" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses %}
+                        <tr>
+                            <td>{{ expense.name }}</td>
+                            <td>{{ expense.amount }}</td>
+                            <td>{{ expense.date }}</td>
+                            <td>{{ expense.category }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No expenses available.</p>
+        {% endif %}
+    
+    
+  
+        <!-- Display total income, total expense, and profit -->
+        <h2>Total Income: {{ total_incomes }}</h2>
+        <h2>Total Expense: {{ total_expense }}</h2>
+        {% if profit >= 0 %}
+            <h2>Profit: {{ profit }}</h2>
+        {% elif profit < 0 %}
+            <h2>Loss: {{ profit }}</h2>
+         {% endif %}
+
+        {% if total_incomes > 0 or  total_expense > 0 %}
+        <div class="button-container">
+            <a href="{% url 'generate_pdf' %}?start_date={{ start_date }}&end_date={{ end_date }}" class="button">Download PDF</a>
+
+        </div>
+        {% endif %}
+
+
+    
+
+    <div class="graphical-representation">
+        <!-- Graphical representation based on financial status -->
+        {% if value >= 0 and value < 50 %}
+            <img src="{% static 'loss.jpg' %}" alt="Loss">
+        {% elif value >= 50 and value < 60 %}
+            <img src="{% static 'expenses-income-balance-pictured-as-.webp' %}" alt="Medium">
+        {% elif value >= 60 and value < 90 %}
+            <img src=" {% static 'high-income-and-low-expense-vector-3515202.jpg' %}" alt="Profit">
+        {% elif value >= 90 and value <= 100 %}
+            <img src="{% static 'Income-PNG-Transparent-Image.png' %}" alt="Another Image">
+        {% endif %}  
+    </div>
+
+</div>
+   
+    
+    
+    <footer>
+        <p>&copy; 2024 WealthPlus. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for handling filter popup -->
+    <script>
+        document.getElementById("filter-btn").addEventListener("click", function() {
+            document.getElementById("filter-popup").classList.toggle("show");
+        });
+    </script>
+   
+
+</body>
+{% else %}
+    <!-- Message prompting the user to sign up -->
+    {% url 'login' as login_url %}
+    <script>
+        window.location.href = "{{ login_url }}";
+    </script>
+{% endif %}
+</html>

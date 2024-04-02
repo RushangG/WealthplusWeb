@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthPlus - Expense</title>
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/expense.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/button.css' %}">
+
+   
+    
+</head>
+{% if user.is_authenticated %}
+<body>
+    <div class="sidebar">
+        <a href="#">Dashboard</a>
+        <a href="{% url 'home' %}" class="active">Home</a> <!-- Added class="active" -->
+        <a href="{% url 'income' %}" class="active">Income</a> <!-- Added class="active" -->
+        <a href="{% url 'expense' %}" class="active">Expense</a>
+        <a href="{% url 'report' %}" class="active">Reports</a>
+        <a href="{% url "logout" %}">logout</a>
+
+    </div>
+    <header style="display: flex;flex-direction: row;justify-content: space-around;">
+
+        <div><h1>WealthPlus </h1></div>
+        <div><h1> Welcome, {{ user.username }} </h1></div>
+
+    </header>
+    <div class="main-content">
+        <!-- Main Content -->
+        <h2>Expense Details :- </h2>
+        {% if expenses %}
+        <table border="1" cellpadding="10" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Category</th> <!-- New column -->
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                 <tr>
+                    <td>{{ expense.name}}</td>
+                    <td>{{ expense.amount}}</td>
+                    <td>{{ expense.date}}</td>
+                    <td>{{ expense.category}}</td>
+                    <td>
+                        <button class="edit" onclick="showEditExpenseForm('{{ expense.name }}', '{{ expense.amount }}', '{{ expense.date|date:"Y-m-d" }}', '{{ expense.category }}', '{{ expense.id }}')">Edit</button>
+                        <button class="delete"> <a href="{% url "deleteexpense" %}?expenseid={{expense.id}}">Delete</a></button>
+                    
+                    </td>
+                </tr>
+                {% endfor %}
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    {% else %}
+        <p>No expense available.</p>
+    {% endif %}
+    <br>
+        <button class="addincome"onclick="showAddExpenseForm()">Add Expense</button> <!-- Add Expense button -->
+    </div>
+    <footer>
+        <p>&copy; 2024 WealthPlus. All rights reserved.</p>
+    </footer>
+
+
+    <!-- Modal overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <h2 id="formTitle">Add Expense</h2>
+            <form id="addExpenseForm" method='post' action=''>
+                {% csrf_token %}
+                
+                <input type="text" name="formtype" id="formType" hidden>
+                <!-- Add income form fields here -->
+                <input type="number" name="expenseid" id="expenseid" hidden>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br><br>
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required oninput="validity.valid||(value='');"><br><br>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required><br><br>
+                <label for="category">Category:</label>
+                <select id="category" name="category" required>
+                    <option value="Housing">Housing</option>
+                    <option value="Food">Food</option>
+                    <option value="House Loan">House Loan</option>
+                    <option value="Car Loan">Car Loan</option>
+                     <option value="Business">Business</option>
+                     <option value="Farming">Farming</option>
+                     <option value="Education">Education</option>
+                     <option value="Transport">Transport</option>
+                     <option value="Property">Property</option>
+                     <option value="Other">Other</option>
+                    <!-- Add more category options as needed -->
+                </select><br><br>
+                <button type="submit">Submit</button>
+                <button type="button" onclick="hideAddExpenseForm()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showAddExpenseForm() {
+            // Show the modal overlay
+            document.getElementById('modalOverlay').style.display = 'flex';
+            // Set the form title
+            document.getElementById('formTitle').innerText = 'Add Expense';
+            // Clear form fields
+            document.getElementById('name').value = '';
+            document.getElementById('amount').value = '';
+            document.getElementById('date').value = '';
+            document.getElementById('category').value = '';
+            // Change submit button text
+            document.getElementById('submitButton').innerText = 'Submit';
+        }
+
+        function showEditExpenseForm(name, amount, date, category,expenseId) {
+            // Show the modal overlay
+            document.getElementById('modalOverlay').style.display = 'flex';
+            // Set the form title
+            document.getElementById('formTitle').innerText = 'Edit Expense';
+            // Populate form fields with income data
+            document.getElementById('name').value = name;
+            document.getElementById('amount').value = amount;
+            document.getElementById('date').value = date;
+            document.getElementById('category').value = category;
+            document.getElementById("formType").value="update";
+            document.getElementById("expenseid").value=expenseId;
+            // Change submit button text
+            document.getElementById('submitButton').innerText = 'Update';
+        }
+        function hideAddExpenseForm() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+
+
+   
+</script>
+</body>
+{% else %}
+    <!-- Message prompting the user to sign up -->
+    {% url 'login' as login_url %}
+    <script>
+        window.location.href = "{{ login_url }}";
+    </script>
+{% endif %}
+</html>
